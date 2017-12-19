@@ -1,7 +1,7 @@
 class Api::TasksController < ApplicationController
   
   def index
-    @tasks = Task.order('updated_at DESC')
+    @tasks = Task.all
   end
 
   def create
@@ -28,7 +28,7 @@ class Api::TasksController < ApplicationController
       
     def task_params
     params.fetch(:task, {}).permit(
-        :name, :is_done
+        :title, :is_done, :fav
     )
   end
 end
