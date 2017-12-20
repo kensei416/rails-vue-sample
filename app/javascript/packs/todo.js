@@ -9,6 +9,6 @@ var app = new Vue({
   el: '#app',
   router: Router,
   components: {
-    'navbar': Header,
+    'navbar': Header
   }
 });
