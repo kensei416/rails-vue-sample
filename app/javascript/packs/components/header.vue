@@ -1,7 +1,7 @@
 <template>
   <v-layout wrap mb-2>
     <v-toolbar class="white">
-      <v-toolbar-title class="dark--text">食</v-toolbar-title>
+      <v-toolbar-title class="dark--text">todo</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon v-for="item in items" :key="item.icon" @click="navigateTo(item.root)">
         <v-icon>{{ item.icon }}</v-icon>
@@ -15,9 +15,10 @@
       drawers: ['Permanent', 'Persistent', 'Temporary'],
       model: false,
       items: [
-        { title: 'Dashboard', icon: 'search', root: '/' },
-        { title: 'Account', icon: 'person_outline', root: '/account' },
-        { title: 'Admin', icon: 'bookmark_border', root: '/contact' }
+        { icon: 'add', root: '/' },
+        { icon: 'notifications_none', root: '/account' },
+        { icon: 'bookmark_border', root: '/contact' },
+        { icon: 'settings', root: '/setting'}
       ]
     }),
     methods: {
