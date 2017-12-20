@@ -6,6 +6,39 @@
       <v-btn icon v-for="item in items" :key="item.icon" @click="navigateTo(item.root)">
         <v-icon>{{ item.icon }}</v-icon>
       </v-btn>
+      <v-menu
+      offset-y
+      :nudge-left="20"
+      :close-on-content-click="false"
+      :nudge-width="200"
+      v-model="menu"
+    >
+      <v-btn dark flat icon slot="activator">
+        <v-icon>settings</v-icon>
+      </v-btn>
+      <v-card>
+        <v-list subheader>
+          <v-list-tile avatar v-for="drop in Geardrop" :key="drop.title" @click="navigateTo(drop.root)">
+            <v-list-tile-action>
+              <v-icon>{{ drop.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ drop.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile @click="navigateTo('/signup')">
+            <v-list-tile-action>
+                <v-icon>exit_to_app</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>ログアウト</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+        </v-list>
+      </v-card>
+    </v-menu>
     </v-toolbar>
   </v-layout>
 </template>
@@ -17,9 +50,15 @@
       items: [
         { icon: 'add', root: '/' },
         { icon: 'notifications_none', root: '/account' },
-        { icon: 'bookmark_border', root: '/contact' },
-        { icon: 'settings', root: '/setting'}
-      ]
+        { icon: 'bookmark_border', root: '/contact' }
+      ],
+      Geardrop: [
+        { title: '設定', icon: 'settings', root: '/setting' },
+      ],
+      fav: true,
+      menu: false,
+      message: false,
+      hints: true
     }),
     methods: {
       navigateTo (root) {
