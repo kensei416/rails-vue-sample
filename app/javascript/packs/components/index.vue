@@ -1,105 +1,64 @@
 <template>
-<v-app>
-  <v-card  flat>
-    <v-card-text>
-      <v-container fluid>
-        <v-layout row>
-          
-          <v-flex xs10>
-            <v-text-field
-              label="Add a to do"
-              v-model="task"
-              @keyup.enter="AddTask"
-              white
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs2>
-            <v-btn fab light @click="AddTask"> 
-              <v-icon dark>add</v-icon>
-            </v-btn>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex>
-            <h1>Task</h1>
-            <v-list two-line>
-              <template v-for="task in tasks">
-                <v-list-tile avatar v-bind:key="task.id" v-show="!task.is_done">
-                  <v-list-tile-action>
-                    <v-checkbox v-model="task.is_done" @click="ToggleBool('task', task.id)"></v-checkbox>
-                  </v-list-tile-action>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="task.title"></v-list-tile-title>
-                  </v-list-tile-content>
-                  <v-list-tile-action>
-                    <v-btn flat @click="ToggleBool('fav', task.id)">
-                      <v-icon v-if="!task.fav">favorite</v-icon>
-                      <v-icon v-else color="red">favorite</v-icon>
-                    </v-btn>
-                  </v-list-tile-action>
-                </v-list-tile>
-                <v-divider v-show="!task.is_done"></v-divider>
-              </template>
-            </v-list>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-card-text>
-  </v-card>
-  </v-app>
+<v-container grid-list-xl text-xs-center>
+  <v-layout row>
+    <v-flex xs12 sm-8>
+      <v-card>
+        <v-list subheader>
+            <v-list-tile avatar v-for="item in items" v-bind:key="item.title" @click="">
+              <v-list-tile-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title v-html="item.title"></v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile avatar @click="navigateTo('/tasks/new')">
+            <v-list-tile-action>
+                <v-icon>add</v-icon>
+            </v-list-tile-action>
+             <v-list-tile-content>
+                <v-list-tile-title>新規作成</v-list-tile-title>
+            </v-list-tile-content>
+            </v-list-tile>
+        </v-list>
+        <v-divider></v-divider>
+      </v-card>
+    </v-flex>
+  </v-layout>
+</v-container>
 </template>
 
 <script>
-import axios from 'axios'
+import Header from './header.vue'
 
-export default {
-    data: () => ({
-      task: '',
-      tasks: []
-    }),
-    created() {
-      this.fetchTasks()
+  export default {
+    data () {
+      return {
+        items: [
+          { title: '受信箱', icon: 'inbox' },
+          { title: 'ブックマーク', icon: 'bookmark_border' },
+          { title: '今日', icon: 'today' },
+          { title: '家族', icon: 'people_outline' },
+        ],
+        model: false,
+        notifications: false,
+        sound: true,
+        widgets: false
+      }
     },
     methods: {
-      AddTask() {
-        axios.post('/api/tasks', { task: { title: this.task }}).then((response) => {
-          this.tasks.push(response.data.task)
-          this.task = ''
-        }, (error) => {
-          console.log('error')
-        })
-      },
-      ToggleBool(type, task_id) {
-        if (type === 'task') {
-          axios.put(`/api/tasks/${task_id}`, { task: { is_done: true, fav: false} }).then((response) => {
-            this.tasks[task_id-1].is_done = !this.tasks[task_id-1].is_done
-          }, (error) => {
-            console.log(error)
-          })
-        } else if (type === 'fav') {
-          axios.put(`/api/tasks/${task_id}`, { task: { fav: true } }).then((response) => {
-            this.tasks[task_id-1].fav = !this.tasks[task_id-1].fav
-          }, (error) => {
-            console.log(error)
-          })
-        }
-      },
-      FavTask(fav_id) {
-        axios.put
-        this.tasks[fav_id-1].fav = !this.tasks[fav_id-1].fav
-      },
-      fetchTasks() {
-        axios.get('/api/tasks').then((response) => {
-         this.tasks.push(...response.data.tasks)
-        })
+      navigateTo (root) {
+        this.$router.push(root)
       }
+    },
+    components: {
+    'navbar': Header,
     }
   }
 </script>
 
-
-<style scoped>
-  [v-cloak] {
-    display: none;
-  }
+<style>
+.dialog {
+  background-color: black;
+}
 </style>
