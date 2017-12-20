@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'users/new'
+
   root 'home#index'
   get '/tasks', to: 'home#index'
   get '/account', to: 'home#index'

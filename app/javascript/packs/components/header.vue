@@ -1,7 +1,7 @@
 <template>
   <v-layout wrap mb-2>
-    <v-toolbar class="white">
-      <v-toolbar-title class="dark--text">todo</v-toolbar-title>
+    <v-toolbar class="cyan accent-3" dark >
+      <v-toolbar-title class="white--text">todo</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon v-for="item in items" :key="item.icon" @click="navigateTo(item.root)">
         <v-icon>{{ item.icon }}</v-icon>
