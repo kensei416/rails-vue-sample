@@ -4,7 +4,10 @@
     <v-flex xs12 sm10 md8 lg6>
       <v-card ref="form">
         <v-card-title v-show="ReturnErrors" class="red--text">
-         <h1>Your address or user_id is already used </h1>
+         <h1>Your address or user_id is Invalid </h1>
+        </v-card-title>
+        <v-card-title>
+          <h1>Log in</h1>
         </v-card-title>
         <v-card-text>
           <v-text-field
@@ -21,33 +24,12 @@
             counter="255"
           ></v-text-field>
           <v-text-field
-            label="UserId"
-            placeholder="Press Your UserId"
-            v-model="form.user_id"
-            required
-            ref="user_id"
-            :rules="[
-              () => !!form.user_id || 'This field is required',
-              () => !!form.user_id.match(/^[a-z0-9]+$/) && form.user_id.length <= 14 || 'Your Id can not use large characters and maximum word length is 14'
-            ]"
-            counter="14"
-            
-          ></v-text-field>
-          <v-text-field
             label="Password"
             v-model="form.password"
             required
             type="password"
             ref="password"
-            :rules="[() => !!form.password && form.password === form.password_confirmation || 'This field is required']"
-          ></v-text-field>
-          <v-text-field
-            label="Passoword Confirmation"
-            v-model="form.password_confirmation"
-            required
-            type="password"
-            ref="password_confirmation"
-            :rules="[() => !!form.password_confirmation && form.password === form.password_confirmation || 'This field is required']"
+            :rules="[() => !!form.password || 'This field is required']"
           ></v-text-field>
         </v-card-text>
         <v-divider class="mt-5"></v-divider>
@@ -70,7 +52,7 @@
               <span>Refresh form</span>
             </v-tooltip>
           </v-slide-x-reverse-transition>
-          <v-btn color="primary" flat @click="submit">Submit</v-btn>
+          <v-btn color="primary" flat @click="login">Submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -83,11 +65,8 @@ import axios from 'axios'
 export default {
     data () {
       return{
-        name: '',
         email: '',
-        user_id: '',
         password: '',
-        password_confirmation: '',
         formHasErrors: false,
         ReturnErrors: false
       }
@@ -100,7 +79,7 @@ export default {
           this.$refs[f].reset()
         })
       },
-      submit () {
+      async login () {
         this.formHasErrors = false
 
         Object.keys(this.form).forEach(f => {
@@ -110,14 +89,18 @@ export default {
         })
 
         if (!this.formHasErrors) {
-          axios.post('/api/users', 
-            { user: { email: this.form.email, user_id: this.form.user_id, password: this.form.password, password_confirmation: this.form.password_confirmation}
-          }).then((response) => {
+          try {
+            const response = await axios.post('/api/sessions', 
+              { session: { 
+                email: this.form.email, 
+                password: this.form.password 
+              }
+            })
+            this.$store.dispatch('setUser', response.data)
             this.$router.push('/')
-            console.log(response)
-          }, (error) => {
-            this.ReturnErrors = true
-          })
+          } catch (error) {
+            console.log(error)
+          }
         }
       }
     },
@@ -125,9 +108,7 @@ export default {
       form () {
         return {
           email: this.email,
-          user_id: this.user_id,
           password: this.password,
-          password_confirmation: this.password_confirmation
         }
       }
     }

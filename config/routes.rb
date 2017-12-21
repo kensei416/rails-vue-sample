@@ -13,6 +13,6 @@ Rails.application.routes.draw do
   namespace :api, format: 'json' do
     resources :tasks, only: [:index, :create, :update]
     resources :users, only: [:index, :show, :create, :update]
-    resources :sessions, only: [:create, :destroy]
+    resources :sessions
   end
 end
