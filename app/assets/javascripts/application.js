@@ -14,3 +14,4 @@
 //= require turbolinks
 //= require_tree .
 //= require vuetify/dist/vuetify
+//= require vuex-persistedstate/dist/vuex-persistedstate
