@@ -1,5 +1,6 @@
 <template>
-<v-app>
+<div>
+<v-app v-if="logged_in">
 <v-container grid-list-xl text-xs-center>
   <v-layout row>
     <v-flex xs12 sm-8>
@@ -47,10 +48,12 @@
   </v-layout>
 </v-container>
 </v-app>
+<login v-else/>
+</div>
 </template>
 
 <script>
-import Header from './header.vue'
+import Login from './login.vue'
 
   export default {
     data () {
@@ -75,8 +78,13 @@ import Header from './header.vue'
         this.dialog = false
       }
     },
+    computed:{
+      logged_in() {
+        return this.$store.getters.isUserLoggedIn
+      }
+    },
     components: {
-    'navbar': Header,
+    'login': Login,
     }
   }
 </script>
