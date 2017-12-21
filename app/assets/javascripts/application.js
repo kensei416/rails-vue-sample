@@ -16,3 +16,4 @@
 //= require vuetify/dist/vuetify
 //= require vuex-persistedstate/dist/vuex-persistedstate
 //= require vuex-router-sync/index.js
+//= require babel-polyfill/dist/polyfill
