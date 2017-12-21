@@ -78,7 +78,6 @@
   </v-app>
 </template>
 <script>
-import Gravatar from 'vue-gravatar';
 import axios from 'axios'
 
 export default {
@@ -131,9 +130,6 @@ export default {
           password_confirmation: this.password_confirmation
         }
       }
-    },
-    components: {
-     'v-gravatar': Gravatar
     }
   }
 </script>
