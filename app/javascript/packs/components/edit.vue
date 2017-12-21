@@ -4,7 +4,6 @@
       <v-layout row>
         <v-flex xs12 sm6 offset-sm3>
           <v-card>
-            <v-gravatar email="kensei416@gmail.com" :size="450"/>
               <v-layout column class="media">
                 <v-card-title>
                   <v-btn dark icon>
@@ -83,16 +82,12 @@
 </template>
 
 <script>
-import Gravatar from 'vue-gravatar';
 
 export default {
     data () {
       return{}
     },
     methods: {
-    },
-    components: {
-     'v-gravatar': Gravatar
     }
   }
 </script>
