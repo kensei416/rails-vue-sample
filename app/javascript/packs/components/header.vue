@@ -3,8 +3,8 @@
     <v-toolbar class="cyan accent-3" dark >
       <v-toolbar-title class="white--text">todo</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon v-for="item in items" :key="item.icon" @click="navigateTo(item.root)">
-        <v-icon>{{ item.icon }}</v-icon>
+      <v-btn flat v-for="item in items" :key="item.icon" @click="navigateTo(item.root)">
+        <v-icon>{{item.icon}}</v-icon>{{item.title}}
       </v-btn>
       <v-menu
       offset-y
@@ -46,11 +46,6 @@ import axios from 'axios'
 
   export default {
     data: () => ({
-      items: [
-        { icon: 'add', root: '/' },
-        { icon: 'notifications_none', root: '/account' },
-        { icon: 'bookmark_border', root: '/contact' }
-      ],
       Geardrop: [
         { title: '設定', icon: 'settings', root: '/setting' }
       ],
@@ -74,6 +69,19 @@ import axios from 'axios'
       },
       user() {
         return this.$store.getters.getUser
+      },
+      items () {
+        if (this.logged_in) {
+          return [
+            { title: '', icon: 'notifications_none', root: '/account' },
+            { title: '', icon: 'bookmark_border', root: '/contact' }
+          ]
+        } else {
+          return [
+            { title: 'Signup', icon: 'create', root: '/signup' },
+            { title: 'Login', icon: 'lock_open', root: '/login' }
+          ]
+        }
       }
     }
   }

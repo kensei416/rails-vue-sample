@@ -6,6 +6,9 @@
         <v-card-title v-show="ReturnErrors" class="red--text">
          <h1>Your address or user_id is already used </h1>
         </v-card-title>
+        <v-card-title >
+         <h1>Sign up</h1>
+        </v-card-title>
         <v-card-text>
           <v-text-field
             label="Email"
@@ -113,8 +116,8 @@ export default {
           axios.post('/api/users', 
             { user: { email: this.form.email, user_id: this.form.user_id, password: this.form.password, password_confirmation: this.form.password_confirmation}
           }).then((response) => {
+            this.$store.dispatch('setUser', response.data)
             this.$router.push('/')
-            console.log(response)
           }, (error) => {
             this.ReturnErrors = true
           })
