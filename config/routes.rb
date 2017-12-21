@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'users/new'
+
 
   root 'home#index'
   get '/tasks', to: 'home#index'
@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   
   namespace :api, format: 'json' do
     resources :tasks, only: [:index, :create, :update]
+    resources :users, only: [:index, :show, :create, :update]
   end
-
-  resources :users
 end

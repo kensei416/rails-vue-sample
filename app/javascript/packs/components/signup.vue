@@ -3,54 +3,56 @@
    <v-layout justify-center>
     <v-flex xs12 sm10 md8 lg6>
       <v-card ref="form">
+        <v-card-title v-show="ReturnErrors" class="red--text">
+         <h1>Your address or user_id is already used </h1>
+        </v-card-title>
         <v-card-text>
           <v-text-field
             label="Email"
             placeholder="Press Your Email"
-            v-model="email"
+            v-model="form.email"
             required
             type="email"
             ref="email"
             :rules="[
-              () => !!email || 'This field is required',
-              () => !!email.match(/^\S+@\S+\.\S+$/) && address.length <= 255 || 'Your Address is Invalid'
+              () => !!form.email || 'This field is required',
+              () => !!form.email.match(/^\S+@\S+\.\S+$/) && form.email.length <= 255 || 'Your Email is Invalid'
             ]"
             counter="255"
-            :error-messages="errorMessages"
           ></v-text-field>
           <v-text-field
             label="UserId"
             placeholder="Press Your UserId"
-            v-model="user_id"
+            v-model="form.user_id"
             required
             ref="user_id"
             :rules="[
-              () => !!user_id || 'This field is required',
-              () => !!user_id.match(/^[a-z0-9]+$/) && user_id.length <= 14 || 'Your Id can not use large characters and maximum word length is 14'
+              () => !!form.user_id || 'This field is required',
+              () => !!form.user_id.match(/^[a-z0-9]+$/) && form.user_id.length <= 14 || 'Your Id can not use large characters and maximum word length is 14'
             ]"
             counter="14"
             
           ></v-text-field>
           <v-text-field
             label="Password"
-            v-model="password"
+            v-model="form.password"
             required
             type="password"
             ref="password"
-            :rules="[() => !!password || 'This field is required']"
+            :rules="[() => !!form.password && form.password === form.password_confirmation || 'This field is required']"
           ></v-text-field>
           <v-text-field
             label="Passoword Confirmation"
-            v-model="password_confirmation"
+            v-model="form.password_confirmation"
             required
             type="password"
             ref="password_confirmation"
-            :rules="[() => !!password_confirmation || 'This field is required']"
+            :rules="[() => !!form.password_confirmation && form.password === form.password_confirmation || 'This field is required']"
           ></v-text-field>
         </v-card-text>
         <v-divider class="mt-5"></v-divider>
         <v-card-actions>
-          <v-btn flat>Cancel</v-btn>
+          <v-btn flat　@click="">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>
             <v-tooltip
@@ -73,11 +75,11 @@
       </v-card>
     </v-flex>
   </v-layout>
-  </v-container>
   </v-app>
 </template>
 <script>
 import Gravatar from 'vue-gravatar';
+import axios from 'axios'
 
 export default {
     data () {
@@ -88,11 +90,36 @@ export default {
         password: '',
         password_confirmation: '',
         formHasErrors: false,
-        errorMessages: []
+        ReturnErrors: false
       }
     },
     methods: {
+      resetForm () {
+        this.formHasErrors = false
+
+        Object.keys(this.form).forEach(f => {
+          this.$refs[f].reset()
+        })
+      },
       submit () {
+        this.formHasErrors = false
+
+        Object.keys(this.form).forEach(f => {
+          if (!this.form[f]) this.formHasErrors = true
+
+          this.$refs[f].validate(true)
+        })
+
+        if (!this.formHasErrors) {
+          axios.post('/api/users', 
+            { user: { email: this.form.email, user_id: this.form.user_id, password: this.form.password, password_confirmation: this.form.password_confirmation}
+          }).then((response) => {
+            // this.$router.push('/')
+            console.log(response)
+          }, (error) => {
+            this.ReturnErrors = true
+          })
+        }
       }
     },
     computed: {
