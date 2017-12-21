@@ -13,7 +13,7 @@
       :nudge-width="200"
       v-model="menu"
     >
-      <v-btn dark flat icon slot="activator">
+      <v-btn dark flat icon slot="activator" v-show="logged_in">
         <v-icon>settings</v-icon>
       </v-btn>
       <v-card>
@@ -26,10 +26,9 @@
               <v-list-tile-title>{{ drop.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-divider></v-divider>
-          <v-list-tile @click="navigateTo('/signup')">
+          <v-list-tile avatar @click="logout">
             <v-list-tile-action>
-                <v-icon>exit_to_app</v-icon>
+              <v-icon>exit_to_app</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>ログアウト</v-list-tile-title>
@@ -43,17 +42,17 @@
   </v-layout>
 </template>
 <script>
+import axios from 'axios'
+
   export default {
     data: () => ({
-      drawers: ['Permanent', 'Persistent', 'Temporary'],
-      model: false,
       items: [
         { icon: 'add', root: '/' },
         { icon: 'notifications_none', root: '/account' },
         { icon: 'bookmark_border', root: '/contact' }
       ],
       Geardrop: [
-        { title: '設定', icon: 'settings', root: '/setting' },
+        { title: '設定', icon: 'settings', root: '/setting' }
       ],
       fav: true,
       menu: false,
@@ -63,7 +62,20 @@
     methods: {
       navigateTo (root) {
         this.$router.push(root)
+      },
+      logout () {
+        axios.delete(`/api/sessions/${this.user.user_id}`)
+        this.$store.dispatch('logoutUser')
+      }
+    },
+    computed: {
+      logged_in() {
+        return this.$store.getters.isUserLoggedIn
+      },
+      user() {
+        return this.$store.getters.getUser
       }
     }
   }
+
 </script>
