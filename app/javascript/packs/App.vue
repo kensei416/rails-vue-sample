@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <headerrr/>
+    <toolbar/>
     <main>
       <router-view></router-view>
     </main>
@@ -9,7 +9,6 @@
 
 <script>
 import Header from './components/header.vue'
-import Login from './components/login.vue'
 
   export default {
     data () {
@@ -22,14 +21,8 @@ import Login from './components/login.vue'
         this.$router.push(root)
       }
     },
-    computed:{
-      logged_in() {
-        return this.$store.getters.isUserLoggedIn
-      }
-    },
     components: {
-    'login': Login,
-    'headerrr': Header
+    'toolbar': Header
     }
   }
 </script>
