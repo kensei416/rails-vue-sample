@@ -1,4 +1,6 @@
 <template>
+<div>
+<v-app v-if="logged_in">
 <v-container grid-list-xl text-xs-center>
   <v-layout row>
     <v-flex xs12 sm-8>
@@ -12,7 +14,7 @@
                 <v-list-tile-title v-html="item.title"></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile avatar @click="navigateTo('/tasks/new')">
+            <v-list-tile avatar @click="dialog=true">
             <v-list-tile-action>
                 <v-icon>add</v-icon>
             </v-list-tile-action>
@@ -25,11 +27,33 @@
       </v-card>
     </v-flex>
   </v-layout>
+  <v-layout>
+    <v-dialog v-model="dialog" max-width="500px">
+        <v-card>
+          <v-card-title>
+            カテゴリの追加
+          </v-card-title>
+          <v-card-text>
+            <v-text-field
+              v-model="newCategory"
+              label="Category Name"
+              @keyup.enter="AddCategory"
+            ></v-text-field>
+          </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" flat @click="AddCategory">Add</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+  </v-layout>
 </v-container>
+</v-app>
+<login v-else/>
+</div>
 </template>
 
 <script>
-import Header from './header.vue'
+import Login from './login.vue'
 
   export default {
     data () {
@@ -40,19 +64,27 @@ import Header from './header.vue'
           { title: '今日', icon: 'today' },
           { title: '家族', icon: 'people_outline' },
         ],
-        model: false,
-        notifications: false,
-        sound: true,
-        widgets: false
+        dialog: false,
+        newCategory: null
       }
     },
     methods: {
       navigateTo (root) {
         this.$router.push(root)
+      },
+      AddCategory () {
+        this.items.push({title: this.newCategory, icon: 'list'})
+        this.newCategory = null
+        this.dialog = false
+      }
+    },
+    computed:{
+      logged_in() {
+        return this.$store.getters.isUserLoggedIn
       }
     },
     components: {
-    'navbar': Header,
+    'login': Login,
     }
   }
 </script>
