@@ -1,5 +1,5 @@
 <template>
- <v-app>
+  <v-container>
    <v-layout justify-center>
     <v-flex xs12 sm10 md8 lg6>
       <v-card ref="form">
@@ -57,7 +57,7 @@
       </v-card>
     </v-flex>
   </v-layout>
-  </v-app>
+  </v-container>
 </template>
 <script>
 import axios from 'axios'
