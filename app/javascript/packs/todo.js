@@ -19,5 +19,8 @@ var app = new Vue({
   el: '#app',
   router: Router,
   store: store,
-  render: h => h(App)
+  render: h => h(App),
+  created() {
+    this.$store.dispatch('LoadTasks')  
+  }
 });
