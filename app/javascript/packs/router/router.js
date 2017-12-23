@@ -13,7 +13,7 @@ Vue.use(VueRouter)
 export default new VueRouter({
   mode: 'history',
   routes: [
-    { path: '/', component: App },
+    { path: '/', component: Tasks },
     { path: '/tasks', component: Tasks },
     { path: '/account', component: Account },
     { path: '/contact', component: Contact },

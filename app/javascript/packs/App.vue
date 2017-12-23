@@ -31,4 +31,7 @@ import Header from './components/header.vue'
 .dialog {
   background-color: black;
 }
+[v-cloak] {
+  display: none;
+}
 </style>
