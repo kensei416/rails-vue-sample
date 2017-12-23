@@ -41,8 +41,8 @@ export default new Vuex.Store({
     setLoading (state, payload) {
       state.loading = payload
     },
-    updateTask(state, task) {
-      state.tasks[task.id-1] = task
+    toggleTask(state, id) {
+      state.tasks[id].is_done = !state.tasks[id].is_done
     }
   },
   actions: {
@@ -72,10 +72,15 @@ export default new Vuex.Store({
         commit('setLoading', false)
       })
     },
-    updateTask({commit}, task) {
-      commit('updateTask', task)
+    toggleTask({commit}, payload) {
+      payload += 1
+      axios.put(`/api/tasks/${payload}`, { task: { is_done: true } }).then((response) => {
+        commit('toggleTask', payload)
+      }, (error) => {
+        console.log(error)
+      })
     },
-    logoutUser({commit}) {
+    logoutUser({commit},) {
       commit('logoutUser')
     }
     
