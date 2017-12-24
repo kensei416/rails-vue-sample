@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+ <v-app>
    <v-layout justify-center>
     <v-flex xs12 sm10 md8 lg6>
       <v-card ref="form">
@@ -78,7 +78,7 @@
       </v-card>
     </v-flex>
   </v-layout>
-  </v-container>
+  </v-app>
 </template>
 <script>
 import axios from 'axios'
@@ -113,8 +113,14 @@ export default {
         })
 
         if (!this.formHasErrors) {
-          this.$store.dispatch('signUpUser', this.form)
-          this.$router.push('/')
+          axios.post('/api/users', 
+            { user: { email: this.form.email, user_id: this.form.user_id, password: this.form.password, password_confirmation: this.form.password_confirmation}
+          }).then((response) => {
+            this.$store.dispatch('setUser', response.data)
+            this.$router.push('/')
+          }, (error) => {
+            this.ReturnErrors = true
+          })
         }
       }
     },

@@ -1,4 +1,5 @@
-<template >
+<template>
+  <v-layout wrap mb-2>
     <v-toolbar class="cyan accent-3" dark >
       <v-toolbar-title class="white--text">todo</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -38,6 +39,7 @@
       </v-card>
     </v-menu>
     </v-toolbar>
+  </v-layout>
 </template>
 <script>
 import axios from 'axios'
