@@ -1,7 +1,7 @@
 <template>
-  <v-container>
-  <v-layout row wrap>
-    <v-flex xs12 sm10 offset-sm1>
+  <v-app>
+  <v-layout row>
+    <v-flex xs12 sm6 offset-sm3>
       <v-card>
         <v-card-media src="https://media-cdn.tripadvisor.com/media/photo-s/0e/9a/e3/1d/freedom-tower.jpg" height="300px">
           <v-layout column class="media">
@@ -77,5 +77,5 @@
       </v-card>
     </v-flex>
   </v-layout>
-  </v-container>
+  </v-app>
 </template>
