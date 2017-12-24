@@ -1,11 +1,5 @@
 <template>
-  <v-container class="mt-2">
-      <v-layout row>
-        <v-flex xs12 sm8 offset-sm2>
-           <task-panel/>
-        </v-flex>
-      </v-layout>
-  </v-container>
+  <task-panel/>
 </template>
 
 <script>
