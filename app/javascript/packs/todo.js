@@ -22,5 +22,10 @@ var app = new Vue({
   render: h => h(App),
   created() {
     this.$store.dispatch('LoadTasks')  
-  }
+  },
+  methods: {
+    navigateTo (root) {
+      this.$router.push(root)
+    }
+  },
 });
