@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card height="800px">
     <v-card-title>
       <span class="headline">{{ title }}</span>
     </v-card-title>
@@ -12,6 +12,7 @@
             required 
             v-model="newTask"
             prepend-icon="create"
+            @keyup.enter="AddTask"
             >
             </v-text-field>
           </v-card-actions>
@@ -63,7 +64,7 @@
       <template v-for="task in tasks">
         <v-list-tile avatar v-bind:key="task.id" v-show="task.is_done===false">
           <v-list-tile-action>
-            <v-btn flat icon @click="updateTask(task.id)">
+            <v-btn flat icon @click="updateTask({type: 'is_done', id: task.id})">
               <v-icon>check_box_outline_blank</v-icon>
             </v-btn>
           </v-list-tile-action>
@@ -71,7 +72,14 @@
             <v-list-tile-title v-html="task.title"></v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
-            <v-icon>edit</v-icon>
+            <v-btn  flat icon :color="task.fav === true ? 'red' : ''" @click="updateTask({type: 'fav', id: task.id})">
+              <v-icon>bookmark_border</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+           <v-list-tile-action>
+            <v-btn  flat icon @click="">
+              <v-icon>settings</v-icon>
+            </v-btn>
           </v-list-tile-action>
         </v-list-tile>
       </template>
@@ -95,12 +103,14 @@ export default {
   },
   methods: {
     AddTask() {
-      this.$store.dispatch('AddTask', this.newTask)
-      this.newTask = null
-      this.dialog = false
+      if (this.newTask) {
+        this.$store.dispatch('AddTask', this.newTask)
+        this.newTask = null
+        this.dialog = false
+      }
     },
-    updateTask (id) {
-      this.$store.dispatch('toggleTask', id)
+    updateTask (value) {
+      this.$store.dispatch('toggleTask', value)
     },
     formatDate (date) {
       if (!date) {
