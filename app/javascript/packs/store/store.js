@@ -41,9 +41,17 @@ export default new Vuex.Store({
     setLoading (state, payload) {
       state.loading = payload
     },
-    toggleTask(state, id) {
-      id = Number(id) - 1
-      state.tasks[id].is_done = !state.tasks[id].is_done
+    toggleTask(state, obj) {
+      let id = Number(obj.id) - 1
+      switch (obj.type) {
+        case 'is_done': 
+          state.tasks[id].is_done = !state.tasks[id].is_done
+          break
+        case 'fav': 
+          state.tasks[id].fav = !state.tasks[id].fav
+          break
+      }
+      
     },
     AddTask(state, payload) {
       state.tasks.push({
@@ -86,11 +94,19 @@ export default new Vuex.Store({
       })
     },
     toggleTask({commit}, payload) {
-      axios.put(`/api/tasks/${payload}`, { task: { is_done: true } }).then((response) => {
-        commit('toggleTask', Number(payload))
-      }, (error) => {
-        console.log(error)
-      })
+        if (payload.type === 'is_done') {
+          axios.put(`/api/tasks/${payload.id}`, { task: { is_done: !this.state.tasks[Number(payload.id)-1].is_done } }).then((response) => {
+            commit('toggleTask', payload)
+          }, (error) => {
+            console.log(error)
+          })
+        } else {
+          axios.put(`/api/tasks/${payload.id}`, { task: { fav: !this.state.tasks[Number(payload.id)-1].fav } }).then((response) => {
+            commit('toggleTask',payload)
+          }, (error) => {
+            console.log(error)
+          })
+        }
     },
     AddTask({commit}, payload) {
       axios.post('/api/tasks', { task: { title: payload }}).then((response) => {
