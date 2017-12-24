@@ -113,14 +113,8 @@ export default {
         })
 
         if (!this.formHasErrors) {
-          axios.post('/api/users', 
-            { user: { email: this.form.email, user_id: this.form.user_id, password: this.form.password, password_confirmation: this.form.password_confirmation}
-          }).then((response) => {
-            this.$store.dispatch('setUser', response.data)
-            this.$router.push('/')
-          }, (error) => {
-            this.ReturnErrors = true
-          })
+          this.$store.dispatch('signUpUser', this.form)
+          this.$router.push('/')
         }
       }
     },
