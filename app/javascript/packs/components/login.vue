@@ -79,7 +79,7 @@ export default {
           this.$refs[f].reset()
         })
       },
-      async login () {
+       login () {
         this.formHasErrors = false
 
         Object.keys(this.form).forEach(f => {
@@ -89,18 +89,7 @@ export default {
         })
 
         if (!this.formHasErrors) {
-          try {
-            const response = await axios.post('/api/sessions', 
-              { session: { 
-                email: this.form.email, 
-                password: this.form.password 
-              }
-            })
-            this.$store.dispatch('setUser', response.data)
-            this.$router.push('/')
-          } catch (error) {
-            console.log(error)
-          }
+          this.$store.dispatch('loginUser', this.form)
         }
       }
     },
