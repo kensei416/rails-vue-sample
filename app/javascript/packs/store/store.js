@@ -16,7 +16,7 @@ export default new Vuex.Store({
     isUserLoggedIn: false,
     tasks: [],
     loading: false,
-    error: null
+    errors: null
   },
   mutations: {
     setToken (state, token) {
@@ -33,6 +33,9 @@ export default new Vuex.Store({
     },
     setTasks (state, tasks) {
       state.tasks = tasks
+    },
+    setErrors (state, errors) {
+      state.errors = errors
     },
     logoutUser (state, user) {
       state.user = null
@@ -70,6 +73,29 @@ export default new Vuex.Store({
     },
     setUser ({commit}, user) {
       commit('setUser', user)
+    },
+    async loginUser({commit}, user) {
+      try {
+        const response = await axios.post('/api/sessions', 
+          { session: { 
+            email: user.email, 
+            password: user.password 
+          }
+        })
+        commit('setUser', response.data)
+        this.$router.push('/')
+      } catch (error) {
+        commit('setErrors', error)
+      }
+    },
+    signUpUser({commit}, user) {
+      axios.post('/api/users', 
+        { user: { email: user.email, user_id: user.user_id, password: user.password, password_confirmation: user.password_confirmation}
+      }).then((response) => {
+        commit('setUser', response.data)
+      }, (error) => {
+        commit('setErrors', error)
+      })
     },
     logoutUser({commit},) {
       commit('logoutUser')

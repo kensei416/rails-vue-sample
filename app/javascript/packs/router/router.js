@@ -20,5 +20,10 @@ export default new VueRouter({
     { path: '/setting', component: Edit },
     { path: '/signup', component: Signup },
     { path: '/login', component: Login }
-  ]
+  ],
+  computed: {
+    logged_in() {
+      return this.$store.getters.isUserLoggedIn
+    }
+  }
 })

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <toolbar/>
-    <v-container fluid grid-list-md>
+    <v-container fluid grid-list-md v-show="logged_in">
       <v-layout row wrap>
       <v-flex d-flex xs4 offset-xs2 md3>
         <v-card dark>
@@ -28,6 +28,9 @@
       </v-flex>
       </v-layout>
     </v-container>
+    <main v-show="!logged_in">
+      <router-view></router-view>
+    </main>
   </v-app>
 </template>
 
@@ -48,6 +51,11 @@ import Header from './components/header.vue'
     },
     components: {
     'toolbar': Header
+    },
+    computed: {
+       logged_in() {
+        return this.$store.getters.isUserLoggedIn
+      }
     }
   }
 </script>
