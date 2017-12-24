@@ -42,7 +42,17 @@ export default new Vuex.Store({
       state.loading = payload
     },
     toggleTask(state, id) {
+      id = Number(id) - 1
       state.tasks[id].is_done = !state.tasks[id].is_done
+    },
+    AddTask(state, payload) {
+      state.tasks.push({
+        id: state.tasks.length+1,
+        title: payload,
+        is_done: false,
+        fav: false,
+        user_id: null
+      })
     }
   },
   actions: {
@@ -53,6 +63,9 @@ export default new Vuex.Store({
     setUser ({commit}, user) {
       commit('setUser', user)
     },
+    logoutUser({commit},) {
+      commit('logoutUser')
+    },
     LoadTasks({commit}) {
       commit('setLoading', true)
       axios.get('/api/tasks').then((response) => {
@@ -60,7 +73,7 @@ export default new Vuex.Store({
         const obj = response.data.tasks
         for (let key in obj) {
           tasks.push({
-            id: key,
+            id: Number(key)+1,
             title: obj[key].title,
             is_done: obj[key].is_done,
             fav: obj[key].fav,
@@ -73,16 +86,20 @@ export default new Vuex.Store({
       })
     },
     toggleTask({commit}, payload) {
-      payload += 1
       axios.put(`/api/tasks/${payload}`, { task: { is_done: true } }).then((response) => {
-        commit('toggleTask', payload)
+        commit('toggleTask', Number(payload))
       }, (error) => {
         console.log(error)
       })
     },
-    logoutUser({commit},) {
-      commit('logoutUser')
+    AddTask({commit}, payload) {
+      axios.post('/api/tasks', { task: { title: payload }}).then((response) => {
+        commit('AddTask', payload)
+      }, (error) => {
+        console.log('error')
+      })
     }
+    
     
   },
   getters: {
