@@ -5,7 +5,7 @@ class Api::SessionsController < ApplicationController
     
     if user && user.authenticate(params[:session][:password]) && !logged_in?
       log_in user
-      render json: { email: user.email, password: user.password, user_id: user.user_id }
+      render json: { email: user.email, password: user.password, user_id: user.user_id, categories: user.categories.all }
     else
       render json: { ErrorMesage: 'Invalid email/password combination' }, status: :not_found
     end

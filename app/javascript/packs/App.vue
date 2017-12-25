@@ -6,13 +6,13 @@
       <v-flex d-flex xs4 offset-xs2 md3>
         <v-card dark>
            <v-list two-line subheader>
-          <v-subheader inset>Project</v-subheader>
-          <v-list-tile v-for="category in categories" v-bind:key="category.title" @click="">
+          <v-subheader inset>Category</v-subheader>
+          <v-list-tile v-for="category in categories" v-bind:key="category.category" @click="">
             <v-list-tile-action>
-              <v-icon color="grey lighten-1">{{ category.icon }}</v-icon>
+              <v-icon color="grey lighten-1">info</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>{{ category.title }}</v-list-tile-title>
+              <v-list-tile-title>{{ category.category }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
               <v-btn icon ripple @click="">
@@ -40,13 +40,7 @@ import Header from './components/header.vue'
   export default {
     data () {
       return {
-        dialog: false,
-         categories: [
-          { title: '受信箱', icon: 'inbox' },
-          { title: 'ブックマーク', icon: 'bookmark_border' },
-          { title: '今日', icon: 'today' },
-          { title: '家族', icon: 'people_outline' }
-        ],
+        dialog: false
       }
     },
     components: {
@@ -55,6 +49,9 @@ import Header from './components/header.vue'
     computed: {
        logged_in() {
         return this.$store.getters.isUserLoggedIn
+      },
+      categories() {
+        return this.$store.getters.getCategories
       }
     }
   }

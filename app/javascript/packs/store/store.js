@@ -151,6 +151,9 @@ export default new Vuex.Store({
     getUser (state) {
       return state.user
     },
+    getCategories (state) {
+      return state.user.categories
+    },
     getTasks(state) {
       return state.tasks
     }
