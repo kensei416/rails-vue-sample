@@ -57,8 +57,8 @@ import axios from 'axios'
         this.$router.push(root)
       },
       logout () {
-        axios.delete(`/api/sessions/${this.user.user_id}`)
-        this.$store.dispatch('logoutUser')
+        this.$store.dispatch('logoutUser', this.user.user_id)
+        this.$router.push('/login')
       }
     },
     computed: {

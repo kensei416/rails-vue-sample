@@ -64,6 +64,10 @@ export default new Vuex.Store({
         fav: false,
         user_id: null
       })
+    },
+    setRoot(state, root) {
+      console.log(root)
+      state.route = root
     }
   },
   actions: {
@@ -82,22 +86,28 @@ export default new Vuex.Store({
             password: user.password 
           }
         })
-        commit('setUser', response.data)
-        this.$router.push('/')
+          commit('setUser', response.data)
+          commit('setRoot', '/')
       } catch (error) {
         commit('setErrors', error)
       }
     },
-    signUpUser({commit}, user) {
-      axios.post('/api/users', 
-        { user: { email: user.email, user_id: user.user_id, password: user.password, password_confirmation: user.password_confirmation}
-      }).then((response) => {
-        commit('setUser', response.data)
-      }, (error) => {
+    async signUpUser({commit}, user) {
+      try {
+        const response = await axios.post('/api/users', 
+          { user: { 
+            email: user.email, user_id: user.user_id, 
+            password: user.password, password_confirmation: user.password_confirmation
+          }
+        })
+          commit('setUser', response.data)
+          commit('setRoot', '/')
+      } catch (error) {
         commit('setErrors', error)
-      })
+      }
     },
-    logoutUser({commit},) {
+    logoutUser({commit}, id) {
+      axios.delete(`/api/sessions/${id}`)
       commit('logoutUser')
     },
     LoadTasks({commit}) {
@@ -152,7 +162,8 @@ export default new Vuex.Store({
       return state.user
     },
     getCategories (state) {
-      return state.user.categories
+      if (state.user) 
+        return state.user.categories
     },
     getTasks(state) {
       return state.tasks

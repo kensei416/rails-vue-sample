@@ -114,7 +114,6 @@ export default {
 
         if (!this.formHasErrors) {
           this.$store.dispatch('signUpUser', this.form)
-          this.$router.push('/')
         }
       }
     },
