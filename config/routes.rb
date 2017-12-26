@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   
   namespace :api, format: 'json' do
     resources :tasks, only: [:index, :create, :update]
-    resources :users, only: [:index, :show, :create, :update]
+    resources :users, only: [:index, :show, :create, :update] do
+      resources :categories, only: [:create, :destroy, :update]
+    end
     resources :sessions
   end
 end

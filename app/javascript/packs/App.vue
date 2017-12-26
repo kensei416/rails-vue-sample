@@ -17,6 +17,32 @@
               </v-btn>
             </v-list-tile-action>
           </v-list-tile>
+          <v-list-tile v-show="dialog">
+            <v-text-field 
+            label="Write Your Task" 
+            required 
+            v-model="newCategory"
+            prepend-icon="create"
+            @keyup.enter="AddCategory"
+            >
+            </v-text-field>
+          </v-list-tile>
+          <v-list-tile v-show="dialog">
+            <v-btn dark @click="AddCategory" class="cyan accent-3"> 
+           　　 <v-icon dark>add</v-icon>AddCategory
+          　</v-btn>
+            <v-btn light @click="CancelCategory">
+              Cancel
+            </v-btn>
+          </v-list-tile>
+          <v-list-tile @click="dialog=true" class="red--text" v-show="dialog===false">
+           <v-list-tile-action>
+             <v-icon>add</v-icon>
+           </v-list-tile-action>
+           <v-list-tile-content>
+             <v-list-tile-title>Add Category</v-list-tile-title>
+           </v-list-tile-content>
+          </v-list-tile>
         </v-list>
         </v-card>
       </v-flex>
@@ -37,11 +63,26 @@ import Header from './components/header.vue'
   export default {
     data () {
       return {
-        dialog: false
+        dialog: false,
+        newCategory: null
       }
     },
     components: {
     'toolbar': Header
+    },
+    methods: {
+      AddCategory() {
+        this.$store.dispatch('AddCategory', this.newCategory)
+        this.newCategory = null
+        this.dialog = false
+      },
+      CancelCategory () {
+        this.dialog = false
+        this.newCategory = null
+      },
+      SelectCategory(category) {
+        this.$store.commit('setCurrentCategory', category)
+      }
     },
     computed: {
        logged_in() {
@@ -50,19 +91,11 @@ import Header from './components/header.vue'
       categories() {
         return this.$store.getters.getCategories
       }
-    },
-    methods: {
-      SelectCategory(category) {
-        this.$store.commit('setCurrentCategory', category)
-      }
     }
   }
 </script>
 
 <style>
-.dialog {
-  background-color: black;
-}
 [v-cloak] {
   display: none;
 }

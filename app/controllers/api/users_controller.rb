@@ -1,4 +1,5 @@
 class Api::UsersController < ApplicationController
+  before_action :logged_in_user, only: [:create, :destory, :update]
 
   def index 
     @users = User.order('updated_at DESC')

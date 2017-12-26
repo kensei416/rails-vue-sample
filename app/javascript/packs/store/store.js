@@ -41,6 +41,7 @@ export default new Vuex.Store({
     logoutUser (state, user) {
       state.user = null
       state.isUserLoggedIn = null
+      state.tasks = null
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -72,6 +73,10 @@ export default new Vuex.Store({
     },
     setCurrentCategory(state, category) {
       state.current_category = category
+    },
+    addCategory(state, category) {
+      console.log(category)
+      state.user.categories.push(category)
     }
   },
   actions: {
@@ -100,8 +105,8 @@ export default new Vuex.Store({
       try {
         const response = await axios.post('/api/users', 
           { user: { 
-            email: user.email, user_id: user.user_id, 
-            password: user.password, password_confirmation: user.password_confirmation
+              email: user.email, user_id: user.user_id, 
+              password: user.password, password_confirmation: user.password_confirmation
           }
         })
           commit('setUser', response.data)
@@ -113,6 +118,19 @@ export default new Vuex.Store({
     logoutUser({commit}, id) {
       axios.delete(`/api/sessions/${id}`)
       commit('logoutUser')
+    },
+    async AddCategory({commit, state}, category) {
+      commit('setLoading', true)
+      try { 
+      const response = await axios.post(`/api/users/${state.user.id}/categories`, 
+        { title: category })
+        commit('addCategory', response.data.category)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setErrors', error)
+        commit('setLoading', false)
+      }
+      
     },
     LoadTasks({commit}) {
       commit('setLoading', true)
