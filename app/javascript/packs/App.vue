@@ -7,11 +7,8 @@
         <v-card dark>
            <v-list two-line subheader>
           <v-subheader inset>Category</v-subheader>
-          <v-list-tile v-for="category in categories" v-bind:key="category.id" @click="">
-            <v-list-tile-action>
-              <v-icon color="grey lighten-1">info</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
+          <v-list-tile v-for="category in categories" v-bind:key="category.id">
+            <v-list-tile-content @click="">
               <v-list-tile-title>{{ category.title }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
