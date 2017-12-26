@@ -112,6 +112,7 @@ export default new Vuex.Store({
           commit('setUser', response.data)
           commit('setRoot', '/')
       } catch (error) {
+        console.log(error)
         commit('setErrors', error)
       }
     },

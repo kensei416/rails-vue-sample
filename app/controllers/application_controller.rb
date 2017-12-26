@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   def logged_in_user
     unless logged_in?
-        store_location
+      render json: "Please login!", status: :unprocessable_entity
     end
   end
 end

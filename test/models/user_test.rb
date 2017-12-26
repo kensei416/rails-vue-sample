@@ -83,7 +83,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "associated categories should be destroyed" do
     @user.save
-    @user.categories.create!(category: "program")
+    @user.categories.create!(title: "program")
     assert_difference 'Category.count', -1 do
       @user.destroy
     end

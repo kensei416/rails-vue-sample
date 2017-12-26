@@ -3,7 +3,7 @@ require 'test_helper'
 class CategoryTest < ActiveSupport::TestCase
   def setup 
     @user = users(:michael)
-    @Task = @user.categories.new(category: "Lorem ipsum")
+    @Task = @user.categories.new(title: "Lorem ipsum")
   end
 
 
@@ -17,12 +17,12 @@ class CategoryTest < ActiveSupport::TestCase
   end
 
   test "category should be present" do
-    @Task.category = nil
+    @Task.title = nil
     assert_not @Task.valid?
   end
 
   test "content should be at most 140 characters" do
-    @Task.category = "a" * 141
+    @Task.title = "a" * 141
     assert_not @Task.valid?
   end
 
