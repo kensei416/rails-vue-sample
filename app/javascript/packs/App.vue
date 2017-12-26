@@ -19,11 +19,14 @@
           </v-list-tile>
           <v-list-tile v-show="dialog">
             <v-text-field 
-            label="Write Your Task" 
+            label="Write Your Category" 
             required 
             v-model="newCategory"
             prepend-icon="create"
+            ref="category"
             @keyup.enter="AddCategory"
+            :rules="[()=> !!newCategory || 'This field is required',
+                     ()=> newCategory.length < 30 || 'Your name is too logn']"
             >
             </v-text-field>
           </v-list-tile>
@@ -64,7 +67,8 @@ import Header from './components/header.vue'
     data () {
       return {
         dialog: false,
-        newCategory: null
+        newCategory: '',
+        formHasErrors: false
       }
     },
     components: {
@@ -72,13 +76,20 @@ import Header from './components/header.vue'
     },
     methods: {
       AddCategory() {
-        this.$store.dispatch('AddCategory', this.newCategory)
-        this.newCategory = null
-        this.dialog = false
+        this.formHasErrors = false
+        if (!this.newCategory) this.formHasErrors = true
+        this.$refs['category'].validate(true)
+
+        if (!this.formHasErrors) {
+          this.$store.dispatch('AddCategory', this.newCategory)
+          this.newCategory = null
+          this.dialog = false
+        }
       },
       CancelCategory () {
         this.dialog = false
         this.newCategory = null
+        this.$refs['category'].reset()
       },
       SelectCategory(category) {
         this.$store.commit('setCurrentCategory', category)
@@ -90,7 +101,7 @@ import Header from './components/header.vue'
       },
       categories() {
         return this.$store.getters.getCategories
-      }
+      },
     }
   }
 </script>

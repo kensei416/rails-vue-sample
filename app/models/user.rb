@@ -19,4 +19,8 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
 
+  def categories
+    Category.where("user_id = ?", id)
+  end
+
 end

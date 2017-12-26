@@ -31,6 +31,7 @@ export default new Vuex.Store({
     setUser (state, user) {
       state.user = user
       state.isUserLoggedIn = true
+      state.errors = null
     },
     setTasks (state, tasks) {
       state.tasks = tasks
@@ -42,6 +43,7 @@ export default new Vuex.Store({
       state.user = null
       state.isUserLoggedIn = null
       state.tasks = null
+      state.errors = null
     },
     setLoading (state, payload) {
       state.loading = payload
