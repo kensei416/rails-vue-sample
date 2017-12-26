@@ -7,8 +7,8 @@
         <v-card dark>
            <v-list two-line subheader>
           <v-subheader inset>Category</v-subheader>
-          <v-list-tile v-for="category in categories" v-bind:key="category.id">
-            <v-list-tile-content @click="">
+          <v-list-tile v-for="category in categories" v-bind:key="category.id" @click="SelectCategory(category.title)">
+            <v-list-tile-content>
               <v-list-tile-title>{{ category.title }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
@@ -49,6 +49,11 @@ import Header from './components/header.vue'
       },
       categories() {
         return this.$store.getters.getCategories
+      }
+    },
+    methods: {
+      SelectCategory(category) {
+        this.$store.commit('setCurrentCategory', category)
       }
     }
   }

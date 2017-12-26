@@ -13,6 +13,7 @@ export default new Vuex.Store({
   state: {
     token: null,
     user: null,
+    current_category: "Inbox",
     isUserLoggedIn: false,
     tasks: [],
     loading: false,
@@ -68,6 +69,9 @@ export default new Vuex.Store({
     setRoot(state, root) {
       console.log(root)
       state.route = root
+    },
+    setCurrentCategory(state, category) {
+      state.current_category = category
     }
   },
   actions: {
@@ -167,6 +171,9 @@ export default new Vuex.Store({
     },
     getTasks(state) {
       return state.tasks
+    },
+    getCurrentCategory(state) {
+      return state.current_category
     }
   }
 })

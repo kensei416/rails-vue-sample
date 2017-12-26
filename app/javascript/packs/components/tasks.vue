@@ -1,7 +1,7 @@
 <template>
   <v-card height="800px">
     <v-card-title>
-      <span class="headline">{{ title }}</span>
+      <span class="headline">{{ current_category }}</span>
     </v-card-title>
     <v-card-actions>
       <v-layout row wrap v-show="dialog">
@@ -93,7 +93,6 @@ export default {
   data () {
     return {
       newTask: '',
-      title: 'Hello',
       dialog: false,
       date: null,
       dateFormatted: null,
@@ -137,6 +136,9 @@ export default {
   computed: {
     tasks () {
       return this.$store.getters.getTasks
+    },
+    current_category () {
+      return this.$store.getters.getCurrentCategory
     }
   }
 }
