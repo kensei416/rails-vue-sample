@@ -8,4 +8,17 @@ class Api::CategoriesController < ApplicationController
       render json: @category.errors, status: :unprocessable_entity
     end
   end
+
+  def destroy
+    @category.destroy
+  end
+
+  private
+
+    def correct_user
+      @category = current_user.categories.find_by(id: params[:id])
+      redirect_to root_url if @micropost.nil?
+    end
+
+  end
 end
