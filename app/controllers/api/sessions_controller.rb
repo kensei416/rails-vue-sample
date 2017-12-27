@@ -14,10 +14,10 @@ class Api::SessionsController < ApplicationController
   end
 
   def destroy
-    if log_out
+    if log_out 
       render :show, status: :destroy
     else
-      render json: { ErrorMessage: 'Invalid logout' }
+      return render json: { ErrorMessage: 'Invalid logout' }
     end
   end
   
