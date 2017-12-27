@@ -82,11 +82,9 @@ export default new Vuex.Store({
       state.current_category = category
     },
     addCategory(state, category) {
-      console.log(category)
       state.user.categories.push(category)
     },
     deleteCategory (state, id) {
-      console.log(id)
       state.user.categories = remove(state.user.categories, id)
     }
   },
