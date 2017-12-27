@@ -12,7 +12,7 @@
               <v-list-tile-title>{{ category.title }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
-              <v-btn icon ripple @click="">
+              <v-btn icon ripple @click="DeleteCategory(category.id)">
                 <v-icon color="grey lighten-1">settings</v-icon>
               </v-btn>
             </v-list-tile-action>
@@ -75,7 +75,7 @@ import Header from './components/header.vue'
     'toolbar': Header
     },
     methods: {
-      AddCategory() {
+      AddCategory () {
         this.formHasErrors = false
         if (!this.newCategory) this.formHasErrors = true
         this.$refs['category'].validate(true)
@@ -85,6 +85,9 @@ import Header from './components/header.vue'
           this.newCategory = null
           this.dialog = false
         }
+      },
+      DeleteCategory (id) {
+        this.$store.dispatch('DeleteCategory', id)
       },
       CancelCategory () {
         this.dialog = false

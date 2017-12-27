@@ -1,3 +1,8 @@
+function remove(array, id) {
+  return array.filter(e => e.id !== id);
+}
+
+
 import Vue from 'vue/dist/vue.esm.js'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
@@ -79,6 +84,10 @@ export default new Vuex.Store({
     addCategory(state, category) {
       console.log(category)
       state.user.categories.push(category)
+    },
+    deleteCategory (state, id) {
+      console.log(id)
+      state.user.categories = remove(state.user.categories, id)
     }
   },
   actions: {
@@ -133,11 +142,21 @@ export default new Vuex.Store({
         commit('setErrors', error)
         commit('setLoading', false)
       }
-      
     },
-    LoadTasks({commit}) {
+    DeleteCategory({commit, state}, id) {
       commit('setLoading', true)
-      axios.get('/api/tasks').then((response) => {
+      try {
+        axios.delete(`/api/categories/${id}`)
+        commit('deleteCategory', id)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setErrors', error)
+        commit('setLoading', false)
+      }
+    },
+    LoadTasks({commit, state}) {
+      commit('setLoading', true)
+      axios.get(`/api/users/${state.user.id}/tasks`).then((response) => {
         const tasks = []
         const obj = response.data.tasks
         for (let key in obj) {

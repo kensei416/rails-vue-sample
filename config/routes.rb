@@ -16,13 +16,9 @@ Rails.application.routes.draw do
     scope shallow_prefix: "sekret" do
       resources :users do
         resources :categories, only: [:create, :destroy, :update], shallow: true
+        resources :tasks, only: [:index, :create, :update], shallow: true        
       end
-    end
-    scope shallow_prefix: "sekret" do
-      resources :categories do
-        resources :tasks, only: [:index, :create, :update], shallow: true
-      end
-    end
+    end   
     resources :sessions
   end
 end
