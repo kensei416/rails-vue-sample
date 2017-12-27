@@ -3,9 +3,9 @@
    <v-layout justify-center>
     <v-flex xs12 sm10 md8 lg6>
       <v-card ref="form">
-        <v-card-title v-show="ReturnErrors" class="red--text">
-         <h1>Your address or user_id is Invalid </h1>
-        </v-card-title>
+        <v-alert color="error" :value="!!errorMessage">
+         <h1>{{ errorMessage }}</h1>
+        </v-alert>
         <v-card-title>
           <h1>Log in</h1>
         </v-card-title>
@@ -34,7 +34,6 @@
         </v-card-text>
         <v-divider class="mt-5"></v-divider>
         <v-card-actions>
-          <v-btn flat　@click="">Cancel</v-btn>
           <v-spacer></v-spacer>
           <v-slide-x-reverse-transition>
             <v-tooltip
@@ -99,6 +98,9 @@ export default {
           email: this.email,
           password: this.password,
         }
+      },
+      errorMessage () {
+        return this.$store.getters.getError
       }
     }
   }

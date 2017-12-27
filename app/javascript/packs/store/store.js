@@ -22,7 +22,7 @@ export default new Vuex.Store({
     isUserLoggedIn: false,
     tasks: [],
     loading: false,
-    errors: null
+    errors: ''
   },
   mutations: {
     setToken (state, token) {
@@ -42,13 +42,15 @@ export default new Vuex.Store({
       state.tasks = tasks
     },
     setErrors (state, errors) {
-      state.errors = errors
+      console.log(errors.response.data.ErrorMesage)
+      state.errors = errors.response.data.ErrorMesage
     },
     logoutUser (state, user) {
       state.user = null
       state.isUserLoggedIn = null
       state.tasks = null
-      state.errors = null
+      state.errors = ''
+      state.current_category = 'Inbox'
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -118,6 +120,7 @@ export default new Vuex.Store({
               password: user.password, password_confirmation: user.password_confirmation
           }
         })
+          console.log(response)
           commit('setUser', response.data)
           commit('setRoot', '/')
       } catch (error) {
@@ -206,6 +209,9 @@ export default new Vuex.Store({
     },
     getUser (state) {
       return state.user
+    },
+    getError (state) {
+      return state.errors
     },
     getCategories (state) {
       if (state.user) 
