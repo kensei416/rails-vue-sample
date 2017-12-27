@@ -3,7 +3,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   def setup
     @user = User.new(
-      email: "user@example.com", user_id: "exampleuser", 
+      email: "user@example.com", user_id: "user",
       password: "foobar", password_confirmation: "foobar"
       )
 
@@ -83,7 +83,7 @@ class UserTest < ActiveSupport::TestCase
 
   test "associated categories should be destroyed" do
     @user.save
-    @user.categories.create!(title: "program")
+    @user.categories.create!(title: "home", user_id: @user.id)
     assert_difference 'Category.count', -1 do
       @user.destroy
     end

@@ -11,9 +11,17 @@ Rails.application.routes.draw do
   get '/login', to: 'home#index'
   
   namespace :api, format: 'json' do
-    resources :tasks, only: [:index, :create, :update]
-    resources :users, only: [:index, :show, :create, :update] do
-      resources :categories, only: [:create, :destroy, :update]
+    resources :users, only: [:index, :show, :create, :update]
+
+    scope shallow_prefix: "sekret" do
+      resources :users do
+        resources :categories, only: [:create, :destroy, :update], shallow: true
+      end
+    end
+    scope shallow_prefix: "sekret" do
+      resources :categories do
+        resources :tasks, only: [:index, :create, :update], shallow: true
+      end
     end
     resources :sessions
   end

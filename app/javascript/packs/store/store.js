@@ -156,17 +156,21 @@ export default new Vuex.Store({
     },
     toggleTask({commit}, payload) {
         if (payload.type === 'is_done') {
-          axios.put(`/api/tasks/${payload.id}`, { task: { is_done: !this.state.tasks[Number(payload.id)-1].is_done } }).then((response) => {
-            commit('toggleTask', payload)
-          }, (error) => {
-            console.log(error)
-          })
+          axios.put(`/api/tasks/${payload.id}`, 
+            { task: { is_done: !this.state.tasks[Number(payload.id)-1].is_done } })
+              .then((response) => {
+                commit('toggleTask', payload)
+              }, (error) => {
+                console.log(error)
+              })
         } else {
-          axios.put(`/api/tasks/${payload.id}`, { task: { fav: !this.state.tasks[Number(payload.id)-1].fav } }).then((response) => {
-            commit('toggleTask',payload)
-          }, (error) => {
-            console.log(error)
-          })
+          axios.put(`/api/tasks/${payload.id}`, 
+            { task: { fav: !this.state.tasks[Number(payload.id)-1].fav } })
+              .then((response) => {
+              commit('toggleTask',payload)
+            }, (error) => {
+              console.log(error)
+            })
         }
     },
     AddTask({commit}, payload) {

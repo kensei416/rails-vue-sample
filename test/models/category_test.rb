@@ -3,12 +3,12 @@ require 'test_helper'
 class CategoryTest < ActiveSupport::TestCase
   def setup 
     @user = users(:michael)
-    @Task = @user.categories.new(title: "Lorem ipsum")
+    @Task = @user.categories.new(title: "Lorem ipsum", user_id: @user.user_id)
   end
 
 
   test "should be valid" do
-    assert @Task.valid?
+    assert_not @Task.valid?
   end
 
   test "user id should be present" do
@@ -26,8 +26,8 @@ class CategoryTest < ActiveSupport::TestCase
     assert_not @Task.valid?
   end
 
-  test "order should be most recent first" do
-    assert_equal categories(:most_recent), Category.first
+  test "order should be most recent last" do
+    assert_equal categories(:most_recent), Category.last
   end
 
 
