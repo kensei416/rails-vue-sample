@@ -1,4 +1,5 @@
 class Api::UsersController < ApplicationController
+  before_action :logged_in_user, only: [:destory, :update]
 
   def index 
     @users = User.order('updated_at DESC')
@@ -26,5 +27,14 @@ class Api::UsersController < ApplicationController
   private 
   def user_params
     params.require(:user).permit(:email, :user_id, :password, :password_confirmation)
+  end
+
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to(root_user) unless current_user?(@user)
+  end
+
+  def admin_user
+    redirect_to(root_user) unless current_user.admin
   end
 end

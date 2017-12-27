@@ -6,19 +6,45 @@
       <v-flex d-flex xs4 offset-xs2 md3>
         <v-card dark>
            <v-list two-line subheader>
-          <v-subheader inset>Project</v-subheader>
-          <v-list-tile v-for="category in categories" v-bind:key="category.title" @click="">
-            <v-list-tile-action>
-              <v-icon color="grey lighten-1">{{ category.icon }}</v-icon>
-            </v-list-tile-action>
+          <v-subheader inset>Category</v-subheader>
+          <v-list-tile v-for="category in categories" v-bind:key="category.id" @click="SelectCategory(category.title)">
             <v-list-tile-content>
               <v-list-tile-title>{{ category.title }}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
-              <v-btn icon ripple @click="">
+              <v-btn icon ripple @click="DeleteCategory(category.id)">
                 <v-icon color="grey lighten-1">settings</v-icon>
               </v-btn>
             </v-list-tile-action>
+          </v-list-tile>
+          <v-list-tile v-show="dialog">
+            <v-text-field 
+            label="Write Your Category" 
+            required 
+            v-model="newCategory"
+            prepend-icon="create"
+            ref="category"
+            @keyup.enter="AddCategory"
+            :rules="[()=> !!newCategory || 'This field is required',
+                     ()=> newCategory.length < 30 || 'Your name is too logn']"
+            >
+            </v-text-field>
+          </v-list-tile>
+          <v-list-tile v-show="dialog">
+            <v-btn dark @click="AddCategory" class="cyan accent-3"> 
+           　　 <v-icon dark>add</v-icon>AddCategory
+          　</v-btn>
+            <v-btn light @click="CancelCategory">
+              Cancel
+            </v-btn>
+          </v-list-tile>
+          <v-list-tile @click="dialog=true" class="red--text" v-show="dialog===false">
+           <v-list-tile-action>
+             <v-icon>add</v-icon>
+           </v-list-tile-action>
+           <v-list-tile-content>
+             <v-list-tile-title>Add Category</v-list-tile-title>
+           </v-list-tile-content>
           </v-list-tile>
         </v-list>
         </v-card>
@@ -41,29 +67,49 @@ import Header from './components/header.vue'
     data () {
       return {
         dialog: false,
-         categories: [
-          { title: '受信箱', icon: 'inbox' },
-          { title: 'ブックマーク', icon: 'bookmark_border' },
-          { title: '今日', icon: 'today' },
-          { title: '家族', icon: 'people_outline' }
-        ],
+        newCategory: '',
+        formHasErrors: false
       }
     },
     components: {
     'toolbar': Header
     },
+    methods: {
+      AddCategory () {
+        this.formHasErrors = false
+        if (!this.newCategory) this.formHasErrors = true
+        this.$refs['category'].validate(true)
+
+        if (!this.formHasErrors) {
+          this.$store.dispatch('AddCategory', this.newCategory)
+          this.newCategory = null
+          this.dialog = false
+        }
+      },
+      DeleteCategory (id) {
+        this.$store.dispatch('DeleteCategory', id)
+      },
+      CancelCategory () {
+        this.dialog = false
+        this.newCategory = null
+        this.$refs['category'].reset()
+      },
+      SelectCategory(category) {
+        this.$store.commit('setCurrentCategory', category)
+      }
+    },
     computed: {
        logged_in() {
         return this.$store.getters.isUserLoggedIn
-      }
+      },
+      categories() {
+        return this.$store.getters.getCategories
+      },
     }
   }
 </script>
 
 <style>
-.dialog {
-  background-color: black;
-}
 [v-cloak] {
   display: none;
 }

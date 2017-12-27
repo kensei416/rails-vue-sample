@@ -1,4 +1,4 @@
 michael:
   email: michael@example.com
-  user_id: michael321
+  user_id: 1
   password_digest: <%= User.digest('password') %>

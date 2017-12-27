@@ -1,3 +1,8 @@
+function remove(array, id) {
+  return array.filter(e => e.id !== id);
+}
+
+
 import Vue from 'vue/dist/vue.esm.js'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
@@ -13,6 +18,7 @@ export default new Vuex.Store({
   state: {
     token: null,
     user: null,
+    current_category: "Inbox",
     isUserLoggedIn: false,
     tasks: [],
     loading: false,
@@ -30,6 +36,7 @@ export default new Vuex.Store({
     setUser (state, user) {
       state.user = user
       state.isUserLoggedIn = true
+      state.errors = null
     },
     setTasks (state, tasks) {
       state.tasks = tasks
@@ -40,6 +47,8 @@ export default new Vuex.Store({
     logoutUser (state, user) {
       state.user = null
       state.isUserLoggedIn = null
+      state.tasks = null
+      state.errors = null
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -64,6 +73,19 @@ export default new Vuex.Store({
         fav: false,
         user_id: null
       })
+    },
+    setRoot(state, root) {
+      console.log(root)
+      state.route = root
+    },
+    setCurrentCategory(state, category) {
+      state.current_category = category
+    },
+    addCategory(state, category) {
+      state.user.categories.push(category)
+    },
+    deleteCategory (state, id) {
+      state.user.categories = remove(state.user.categories, id)
     }
   },
   actions: {
@@ -82,27 +104,57 @@ export default new Vuex.Store({
             password: user.password 
           }
         })
-        commit('setUser', response.data)
-        this.$router.push('/')
+          commit('setUser', response.data)
+          commit('setRoot', '/')
       } catch (error) {
         commit('setErrors', error)
       }
     },
-    signUpUser({commit}, user) {
-      axios.post('/api/users', 
-        { user: { email: user.email, user_id: user.user_id, password: user.password, password_confirmation: user.password_confirmation}
-      }).then((response) => {
-        commit('setUser', response.data)
-      }, (error) => {
+    async signUpUser({commit}, user) {
+      try {
+        const response = await axios.post('/api/users', 
+          { user: { 
+              email: user.email, user_id: user.user_id, 
+              password: user.password, password_confirmation: user.password_confirmation
+          }
+        })
+          commit('setUser', response.data)
+          commit('setRoot', '/')
+      } catch (error) {
+        console.log(error)
         commit('setErrors', error)
-      })
+      }
     },
-    logoutUser({commit},) {
+    logoutUser({commit}, id) {
+      axios.delete(`/api/sessions/${id}`)
       commit('logoutUser')
     },
-    LoadTasks({commit}) {
+    async AddCategory({commit, state}, category) {
       commit('setLoading', true)
-      axios.get('/api/tasks').then((response) => {
+      try { 
+      const response = await axios.post(`/api/users/${state.user.id}/categories`, 
+        { title: category })
+        commit('addCategory', response.data.category)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setErrors', error)
+        commit('setLoading', false)
+      }
+    },
+    DeleteCategory({commit, state}, id) {
+      commit('setLoading', true)
+      try {
+        axios.delete(`/api/categories/${id}`)
+        commit('deleteCategory', id)
+        commit('setLoading', false)
+      } catch (error) {
+        commit('setErrors', error)
+        commit('setLoading', false)
+      }
+    },
+    LoadTasks({commit, state}) {
+      commit('setLoading', true)
+      axios.get(`/api/users/${state.user.id}/tasks`).then((response) => {
         const tasks = []
         const obj = response.data.tasks
         for (let key in obj) {
@@ -121,17 +173,21 @@ export default new Vuex.Store({
     },
     toggleTask({commit}, payload) {
         if (payload.type === 'is_done') {
-          axios.put(`/api/tasks/${payload.id}`, { task: { is_done: !this.state.tasks[Number(payload.id)-1].is_done } }).then((response) => {
-            commit('toggleTask', payload)
-          }, (error) => {
-            console.log(error)
-          })
+          axios.put(`/api/tasks/${payload.id}`, 
+            { task: { is_done: !this.state.tasks[Number(payload.id)-1].is_done } })
+              .then((response) => {
+                commit('toggleTask', payload)
+              }, (error) => {
+                console.log(error)
+              })
         } else {
-          axios.put(`/api/tasks/${payload.id}`, { task: { fav: !this.state.tasks[Number(payload.id)-1].fav } }).then((response) => {
-            commit('toggleTask',payload)
-          }, (error) => {
-            console.log(error)
-          })
+          axios.put(`/api/tasks/${payload.id}`, 
+            { task: { fav: !this.state.tasks[Number(payload.id)-1].fav } })
+              .then((response) => {
+              commit('toggleTask',payload)
+            }, (error) => {
+              console.log(error)
+            })
         }
     },
     AddTask({commit}, payload) {
@@ -151,8 +207,15 @@ export default new Vuex.Store({
     getUser (state) {
       return state.user
     },
+    getCategories (state) {
+      if (state.user) 
+        return state.user.categories
+    },
     getTasks(state) {
       return state.tasks
+    },
+    getCurrentCategory(state) {
+      return state.current_category
     }
   }
 })
