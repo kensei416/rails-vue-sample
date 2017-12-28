@@ -18,7 +18,7 @@ class Api::UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       log_in @user
-      render json: { email: @user.email, user_id: @user.user_id }
+      render json: { email: @user.email, id: @user.id, categories: [] }
     else
       render json: @user, status: :unprocessable_entity
     end

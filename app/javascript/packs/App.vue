@@ -24,9 +24,9 @@
             v-model="newCategory"
             prepend-icon="create"
             ref="category"
+            @input="geLength"
             @keyup.enter="AddCategory"
-            :rules="[()=> !!newCategory || 'This field is required',
-                     ()=> newCategory.length < 30 || 'Your name is too logn']"
+            :rules="[()=> !!newCategory || 'This field is required']"
             >
             </v-text-field>
           </v-list-tile>
@@ -96,6 +96,9 @@ import Header from './components/header.vue'
       },
       SelectCategory(category) {
         this.$store.commit('setCurrentCategory', category)
+      },
+       geLength () {
+        console.log(this.newCategory.length)
       }
     },
     computed: {
@@ -104,7 +107,7 @@ import Header from './components/header.vue'
       },
       categories() {
         return this.$store.getters.getCategories
-      },
+      }
     }
   }
 </script>
