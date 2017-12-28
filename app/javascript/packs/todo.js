@@ -1,10 +1,10 @@
 import Vue from 'vue/dist/vue.esm.js'
-import Vuetify from 'vuetify'
+import 'babel-polyfill' 
+import Vuetify from 'vuetify/dist/vuetify'
 import App from './App'
 import Router from './router/router'
 import store from './store/store'
 import { sync } from 'vuex-router-sync'
-
 
 
 
