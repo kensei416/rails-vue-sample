@@ -29,6 +29,10 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+group :test do
+  gem 'rails-controller-testing'  
+end
+
 group :development, :test do
   gem 'sqlite3'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

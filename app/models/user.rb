@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   attr_accessor :remember_token
   has_many :categories, dependent: :destroy
-  before_save :prepare_save
+  before_save { email.downcase! }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 }, format:     { with: VALID_EMAIL_REGEX }, uniqueness: true
   VALID_USER_ID_REGEX = /\A[a-z0-9]+\Z/

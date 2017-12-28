@@ -103,7 +103,8 @@ export default new Vuex.Store({
         const response = await axios.post('/api/sessions', 
           { session: { 
             email: user.email, 
-            password: user.password 
+            password: user.password,
+            remember_me: user.remember_me
           }
         })
           commit('setUser', response.data)

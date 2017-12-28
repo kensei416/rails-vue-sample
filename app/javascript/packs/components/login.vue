@@ -31,6 +31,15 @@
             ref="password"
             :rules="[() => !!form.password || 'This field is required']"
           ></v-text-field>
+          <v-checkbox
+            color="green"
+            ref="checkbox"
+            v-model="remember_me"
+          >
+            <div slot="label" @click.stop="">
+              Remember me on this computer
+            </div>
+          </v-checkbox>
         </v-card-text>
         <v-divider class="mt-5"></v-divider>
         <v-card-actions>
@@ -38,7 +47,7 @@
           <v-slide-x-reverse-transition>
             <v-tooltip
               left
-              v-if="formHasErrors"
+              v-if="FormHasErrors"
             >
               <v-btn
                 icon
@@ -51,7 +60,10 @@
               <span>Refresh form</span>
             </v-tooltip>
           </v-slide-x-reverse-transition>
-          <v-btn color="primary" flat @click="login">Submit</v-btn>
+          <v-btn 
+            color="primary" 
+            flat @click="login"
+          >Submit</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -63,42 +75,59 @@ import axios from 'axios'
 
 export default {
     data () {
-      return{
+      const defaultForm = Object.freeze({
         email: '',
-        password: '',
-        formHasErrors: false,
-        ReturnErrors: false
+        password: ''
+      })
+      return{
+        form: Object.assign({}, defaultForm),
+        remember_me: 0,
+        FormHasErrors: false,
+        rules: {
+          email: [
+            val => !!val || 'This field is required',
+            val => !!val.match(/^\S+@\S+\.\S+$/) || val.length >= 255 || 'Your Email is Invalid'
+          ],
+          password: [
+            val => !!val || 'This field is required',
+            val => val.length >= 30 || 'Your password is too long'
+          ]
+        }
+       
       }
     },
     methods: {
       resetForm () {
-        this.formHasErrors = false
+        this.FormHasErrors = false
 
         Object.keys(this.form).forEach(f => {
           this.$refs[f].reset()
         })
       },
        login () {
-        this.formHasErrors = false
+        this.FormHasErrors = false
 
         Object.keys(this.form).forEach(f => {
-          if (!this.form[f]) this.formHasErrors = true
-
-          this.$refs[f].validate(true)
+          if (!this.form[f]) this.FormHasErrors = true
         })
-
-        if (!this.formHasErrors) {
-          this.$store.dispatch('loginUser', this.form)
+        console.log(
+          {
+            email: this.form.email,
+            password: this.form.password, 
+            remember_me: String(this.remember_me)
+          }
+        )
+        if (!this.FormHasErrors) {
+          this.$store.dispatch('loginUser', 
+          {
+            email: this.form.email,
+            password: this.form.password, 
+            remember_me: this.remember_me
+          })
         }
       }
     },
     computed: {
-      form () {
-        return {
-          email: this.email,
-          password: this.password,
-        }
-      },
       errorMessage () {
         return this.$store.getters.getError
       }
