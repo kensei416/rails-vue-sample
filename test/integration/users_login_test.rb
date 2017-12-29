@@ -6,13 +6,11 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test "login with invalid information" do
-    get login_path
     post api_sessions_path, params: {session: {email: "", password: ""}}
     assert_not is_logged_in?
   end
 
   test "login with valid information" do
-    get login_path
     post api_sessions_path, params: { session: 
                           {
                             email: @user.email, 
@@ -22,7 +20,6 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end  
 
   test "login with valid information followed by logout" do
-    get login_path
     post api_sessions_path, params: { session: 
                           {
                             email: @user.email, 
