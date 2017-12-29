@@ -122,7 +122,7 @@ export default {
           {
             email: this.form.email,
             password: this.form.password, 
-            remember_me: this.remember_me
+            remember_me: String(this.remember_me)
           })
         }
       }
