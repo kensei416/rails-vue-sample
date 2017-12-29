@@ -13,7 +13,3 @@
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
-//= require vuetify/dist/vuetify.js
-//= require vuex-persistedstate/dist/vuex-persistedstate
-//= require vuex-router-sync/index.js
-//= require babel-polyfill/dist/polyfill
