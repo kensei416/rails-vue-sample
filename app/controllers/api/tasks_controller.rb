@@ -7,7 +7,7 @@ class Api::TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-
+    
     if @task.save
       render :show, status: :created
     else
@@ -29,7 +29,7 @@ class Api::TasksController < ApplicationController
       
     def task_params
     params.fetch(:task, {}).permit(
-        :title, :is_done, :fav
+        :title, :category_id, :is_done, :fav
     )
   end
 end

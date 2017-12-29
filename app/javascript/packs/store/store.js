@@ -194,12 +194,17 @@ export default new Vuex.Store({
             })
         }
     },
-    AddTask({commit}, payload) {
-      axios.post('/api/tasks', { task: { title: payload }}).then((response) => {
-        commit('AddTask', payload)
-      }, (error) => {
-        console.log('error')
-      })
+    AddTask({commit, state}, payload) {
+      commit('setLoading', true)
+      try {
+        axios.post(`/api/users/${state.user.id}/tasks`, { task: { title: payload, category_id: state.user.id }}).then((response) => {
+          commit('AddTask', payload)
+          commit('setLoading', false)
+        })
+      } catch (error) {
+        commit('setErrors', error)
+        commit('setLoading', false)
+      }
     }
     
     
