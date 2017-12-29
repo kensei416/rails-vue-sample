@@ -22,13 +22,14 @@ ActiveRecord::Schema.define(version: 20171227090739) do
   end
 
   create_table "tasks", force: :cascade do |t|
-    t.string "user_id"
     t.string "title", null: false
-    t.string "category"
     t.boolean "is_done", default: false, null: false
     t.boolean "fav", default: false, null: false
+    t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["category_id", "created_at"], name: "index_tasks_on_category_id_and_created_at"
+    t.index ["category_id"], name: "index_tasks_on_category_id"
   end
 
   create_table "users", force: :cascade do |t|
