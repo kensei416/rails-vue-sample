@@ -111,9 +111,3 @@ import Header from './components/header.vue'
     }
   }
 </script>
-
-<style>
-[v-cloak] {
-  display: none;
-}
-</style>

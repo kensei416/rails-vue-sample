@@ -135,6 +135,7 @@ export default {
   },
   computed: {
     tasks () {
+      console.log(this.$store.getters.getTasks)
       return this.$store.getters.getTasks
     },
     current_category () {
@@ -145,8 +146,3 @@ export default {
 </script>
 
 
-<style scoped>
-  [v-cloak] {
-    display: none;
-  }
-</style>

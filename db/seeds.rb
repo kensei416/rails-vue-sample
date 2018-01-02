@@ -1,5 +1,5 @@
-user = User.create!(user_id:  "exampleuser1",
-        email: "example2@railstutorial.org",
+user = User.create!(user_id:  "kensei416",
+        email: "kensei416@gmail.com",
         password:              "foobar",
         password_confirmation: "foobar")
 
