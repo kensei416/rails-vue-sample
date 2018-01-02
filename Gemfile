@@ -7,11 +7,9 @@ end
 
 
 gem 'rails', '~> 5.1.4'
-gem 'material_icons'
 gem 'bcrypt'
 gem 'puma', '~> 3.7'
 gem 'sass-rails', '~> 5.0'
-gem 'webpacker'
 gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
